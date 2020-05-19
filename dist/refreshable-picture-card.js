@@ -1,18 +1,3 @@
- 
-function loadScript(){
-  if(window[`scriptLoaded`]){
-    return;
-  }
-
-  var script = document.createElement("script");
-  script.src = `/hacsfiles/refreshable-picture-card/html.js`;
-  script.type = "text/javascript";
-  script.async = false;
-  document.head.appendChild(script); 
-  window[`scriptLoaded`] = true;
-  
-}
-
 
 class ResfeshablePictureCard extends HTMLElement {
 
@@ -21,7 +6,7 @@ class ResfeshablePictureCard extends HTMLElement {
     this.attachShadow({ mode: 'open' });
   }
   setConfig(config) {
-    loadScript(config.remote_template);
+    
     const root = this.shadowRoot;
     if (root.lastChild) root.removeChild(root.lastChild);
 
@@ -36,11 +21,31 @@ class ResfeshablePictureCard extends HTMLElement {
   
     const config = this._config;
     
-    loadScript(config);
-    
+    let picture = config.static_picture;
+    let title = config.title || ""
     try{
-        const html = `this is html`;
-        const css = `css`;
+        
+        const html = `
+        <p class="center txt">${title}</p>
+        <img id="thePic" class="center thePic" src="${picture}" ></img>
+        <br>
+        `;
+        const css = `
+          .center{
+            display: block;
+           margin-left: auto;
+          margin-right: auto;
+          width: 90%;
+          }
+          .txt{
+            color: var(--ha-card-header-color, --primary-text-color);
+    font-family: var(--ha-card-header-font-family, inherit);
+    font-size: var(--ha-card-header-font-size, 24px);
+    letter-spacing: -0.012em;
+    line-height: 32px;
+          }
+          
+        `;
         
         
         const root = this.shadowRoot;
@@ -48,7 +53,7 @@ class ResfeshablePictureCard extends HTMLElement {
         // root.lastChild.hass = hass;
    
         const card = document.createElement('ha-card');
-        if(!this.content && window[`scriptLoaded`]){
+        if(!this.content){
              this.content = document.createElement('div');
              const style = document.createElement('style');
              style.textContent = css;
@@ -58,49 +63,44 @@ class ResfeshablePictureCard extends HTMLElement {
      
              root.appendChild(card);
              
-             // this._bindButtons(card, this._hass, this._config);
+              this._bindrefresh(card, this._hass, this._config);
+              window[`scriptLoaded`] = true
         }
     
     } catch(err){
       console.log('waiting for refreshable-picture-card to load');
-      loadScript();
     }
     
   }
   
  
     
-  // _bindButtons(card, hass, config){
-  //   var buttons =  card.getElementsByClassName(`myButton-${config.remote_template}`);
-  //   var i;
-  //   for (i = 0; i < buttons.length; i++) { 
-  //     let button = buttons[i]
-  //       button.addEventListener('click', function(source){
-  //         console.log(button.id);
-  //         let buttonData = getButtonData(button.id, config);
-  //         console.log(buttonData)
-  //         let domain = buttonData.call.split(".")[0]
-  //         let action = buttonData.call.split(".")[1]
-  //         hass.callService(domain,
-  //                           action, 
-  //                           buttonData.data
-  //                            );
-  //       });
-  //   }
-  // }
-  
-  
+  _bindrefresh(card, hass, config){
+    var picture =  card.getElementsByClassName(`thePic`)[0];
+    // console.log(hass.states[config.entity_picture]["attributes"][config.attribute])
+    
+    let refreshTime = config.update_interval || 30
+    
+    let pictureUrl = config.static_picture
+    if(config.entity_picture){
+      pictureUrl = hass.states[config.entity_picture]["attributes"][config.attribute]
+    }
+    
+    let refreshFunc = function(){
+      picture.src = pictureUrl;
+      // console.log("refreshingPic")
+      setTimeout(refreshFunc, refreshTime * 1000)
+    }
+    
+    refreshFunc();
 
-
+  }
+  
   getCardSize() {
     return 3;
   }
   
 
 }
-
- function getButtonData(buttonId, config){
-    return config.buttons[buttonId];
-  }
 
 customElements.define('refreshable-picture-card', ResfeshablePictureCard);
