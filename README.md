@@ -23,7 +23,7 @@ attribute: entity_picture
 
 ```
 
-url image exampl:
+url image example:
 ```
 type: 'custom:refreshable-picture-card'
 title: My Mibox
