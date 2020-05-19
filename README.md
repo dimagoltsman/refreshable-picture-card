@@ -46,6 +46,6 @@ static_picture: http://192.168.1.174/cgi-bin/api.cgi?cmd=Snap&channel=0&rs=someS
 
 
 
-# you are also welcome to contribute new templates. you can add new buttons and remove buttons, just make sure their id matches the id you put in the yaml #
+# you are also welcome to contribute #
 
 
