@@ -73,6 +73,15 @@ class ResfeshablePictureCard extends HTMLElement {
     
   }
   
+  _makeid(length) {
+   var result           = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var charactersLength = characters.length;
+   for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+}
  
     
   _bindrefresh(card, hass, config){
@@ -81,15 +90,25 @@ class ResfeshablePictureCard extends HTMLElement {
     
     let refreshTime = config.update_interval || 30
     
-    let pictureUrl = config.static_picture
-    if(config.entity_picture){
-      pictureUrl = hass.states[config.entity_picture]["attributes"][config.attribute]
-    }
     
     let refreshFunc = function(){
-      picture.src = pictureUrl;
-      // console.log("refreshingPic")
-      setTimeout(refreshFunc, refreshTime * 1000)
+      var pictureUrl = config.static_picture
+      console.log(pictureUrl)
+      
+      if(config.entity_picture){
+       pictureUrl = hass.states[config.entity_picture]["attributes"][config.attribute]
+       if(pictureUrl.indexOf("&") > -1){
+        pictureUrl = pictureUrl + "&currentTimeCache=" + (new Date().getTime())
+       }else{
+         pictureUrl = pictureUrl + "?currentTimeCache=" + (new Date().getTime())
+       }
+       
+       
+       console.log(pictureUrl)
+     }
+       picture.src = pictureUrl;
+        // console.log("refreshingPic")
+        setTimeout(refreshFunc, refreshTime * 1000)
     }
     
     refreshFunc();
