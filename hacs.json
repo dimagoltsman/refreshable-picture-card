@@ -1,0 +1,7 @@
+{
+  "name": "Refreshable picture card",
+  "description" : "a picture that can be loaded from url or entity attribute and refreshed every N seconds",
+  "content_in_root": false,
+  "filename": "refreshable-picture-card.js",
+  "render_readme" : true
+}
