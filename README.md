@@ -49,3 +49,4 @@ static_picture: http://192.168.1.174/cgi-bin/api.cgi?cmd=Snap&channel=0&rs=someS
 # you are also welcome to contribute #
 
 
+
