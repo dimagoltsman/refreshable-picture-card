@@ -23,26 +23,31 @@ class ResfeshablePictureCard extends HTMLElement {
     
     let picture = config.static_picture;
     let title = config.title || ""
+    let br = "<br>"
+    if(title){
+      br = ""
+    }
     try{
         
         const html = `
-        <p class="center txt">${title}</p>
+        <p class="center txt">${title}</p>${br}
         <img id="thePic" class="center thePic" src="${picture}" ></img>
         <br>
         `;
         const css = `
           .center{
             display: block;
-           margin-left: auto;
-          margin-right: auto;
-          width: 90%;
+            margin-top: auto;
+            margin-left: auto;
+            margin-right: auto;
+            width: 90%;
           }
           .txt{
             color: var(--ha-card-header-color, --primary-text-color);
-    font-family: var(--ha-card-header-font-family, inherit);
-    font-size: var(--ha-card-header-font-size, 24px);
-    letter-spacing: -0.012em;
-    line-height: 32px;
+            font-family: var(--ha-card-header-font-family, inherit);
+            font-size: var(--ha-card-header-font-size, 24px);
+            letter-spacing: -0.012em;
+            line-height: 32px;
           }
           
         `;
