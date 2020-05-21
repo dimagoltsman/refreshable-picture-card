@@ -101,7 +101,7 @@ class ResfeshablePictureCard extends HTMLElement {
        
      }
      
-      if(pictureUrl.indexOf("&") > -1){
+      if(pictureUrl.indexOf("?") > -1){
         pictureUrl = pictureUrl + "&currentTimeCache=" + (new Date().getTime())
        }else{
          pictureUrl = pictureUrl + "?currentTimeCache=" + (new Date().getTime())
