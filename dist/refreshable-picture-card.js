@@ -98,7 +98,6 @@ class ResfeshablePictureCard extends HTMLElement {
     
     let refreshFunc = function(){
       var pictureUrl = config.static_picture
-    
       
       if(config.entity_picture){
        pictureUrl = hass.states[config.entity_picture]["attributes"][config.attribute]
@@ -106,15 +105,17 @@ class ResfeshablePictureCard extends HTMLElement {
        
      }
      
-      if(pictureUrl.indexOf("?") > -1){
+     if(window.getComputedStyle(picture).display){
+       if(pictureUrl.indexOf("?") > -1){
         pictureUrl = pictureUrl + "&currentTimeCache=" + (new Date().getTime())
        }else{
          pictureUrl = pictureUrl + "?currentTimeCache=" + (new Date().getTime())
        }
        console.log(pictureUrl)
        picture.src = pictureUrl;
-        // console.log("refreshingPic")
-        setTimeout(refreshFunc, refreshTime * 1000)
+     }
+      
+       setTimeout(refreshFunc, refreshTime * 1000)
     }
     
     refreshFunc();
