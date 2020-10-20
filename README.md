@@ -44,6 +44,31 @@ static_picture: http://192.168.1.174/cgi-bin/api.cgi?cmd=Snap&channel=0&rs=someS
 
 ```
 
+tap action example: 
+
+```
+type: 'custom:refreshable-picture-card'
+title: Reolink Camera
+update_interval: 1
+static_picture: http://192.168.1.174/cgi-bin/api.cgi?cmd=Snap&channel=0&rs=someString&user=username&password=password
+tap_action:
+  call: remote.send_command
+  data:
+    entity_id: remote.living_room_remote
+    command: b64:JgCgAJSSEg8QEBIPERAPMhEyDxERDxAxEDESLxAyEREPEREQEBAQlBARDxIQEBAREi8PMhEvEhAQMRExDzIREBARDhISDhAyEBEQEQ8REi8RAAdclJMRDxAREREPEREwEi8SEBARDzIQMhAwDzESEBARERAQEBKSEg8QEBAREREPMREyDjESDhIwETESLxEQEBEREBAQETAPERERERAQMRAADQUAAAAAAAAAAA==
+
+```
+
+navigate example (onclick, open url in new tab): 
+
+```
+type: 'custom:refreshable-picture-card'
+title: Reolink Camera
+update_interval: 1
+static_picture: http://192.168.1.174/cgi-bin/api.cgi?cmd=Snap&channel=0&rs=someString&user=username&password=password
+navigate: https://github.com/dimagoltsman/refreshable-picture-card/
+```
+
 
 
 # you are also welcome to contribute #
