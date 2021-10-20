@@ -26,7 +26,7 @@ class ResfeshablePictureCard extends HTMLElement {
     
     // console.log(hassObj.states[config.entity_picture]["attributes"][config.attribute])
     
-    let picture = config.static_picture;
+    let picture = this._getPictureUrl(config.static_picture);
     let title = config.title || ""
     
     let html = ""
@@ -91,7 +91,7 @@ class ResfeshablePictureCard extends HTMLElement {
                 }
               
               };
-              this._bindrefresh(card, this._hass, this._config);
+              this._bindrefresh(card, this._hass, this._config, this._getPictureUrl);
               
               window[`scriptLoaded`] = true
         }
@@ -114,7 +114,7 @@ class ResfeshablePictureCard extends HTMLElement {
 }
  
     
-  _bindrefresh(card, hass, config){
+  _bindrefresh(card, hass, config, getPictureUrl){
     var picture =  card.getElementsByClassName(`thePic`)[0];
   
     
@@ -131,16 +131,20 @@ class ResfeshablePictureCard extends HTMLElement {
      }
      
      if(window.getComputedStyle(picture).display){
-       if(pictureUrl.indexOf("?") > -1){
-        pictureUrl = pictureUrl + "&currentTimeCache=" + (new Date().getTime())
-       }else{
-         pictureUrl = pictureUrl + "?currentTimeCache=" + (new Date().getTime())
-       }
+      
       // console.log(pictureUrl)
-       picture.src = pictureUrl;
+       picture.src = getPictureUrl(pictureUrl);
     
      }
-      
+   
+        _getPictureUrl(staticPictureUrl){
+          var pictureUrl = staticPictureUrl;
+          if(pictureUrl.indexOf("?") > -1){
+            pictureUrl = pictureUrl + "&currentTimeCache=" + (new Date().getTime())
+          }else{
+            pictureUrl = pictureUrl + "?currentTimeCache=" + (new Date().getTime())
+          }
+       }
        setTimeout(refreshFunc, refreshTime * 1000)
     }
     
