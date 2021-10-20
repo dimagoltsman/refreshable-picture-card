@@ -137,20 +137,23 @@ class ResfeshablePictureCard extends HTMLElement {
     
      }
    
-        _getPictureUrl(staticPictureUrl){
-          var pictureUrl = staticPictureUrl;
-          if(pictureUrl.indexOf("?") > -1){
-            pictureUrl = pictureUrl + "&currentTimeCache=" + (new Date().getTime())
-          }else{
-            pictureUrl = pictureUrl + "?currentTimeCache=" + (new Date().getTime())
-          }
-       }
+       
        setTimeout(refreshFunc, refreshTime * 1000)
     }
+    
     
     refreshFunc();
 
   }
+ 
+   _getPictureUrl(staticPictureUrl){
+      var pictureUrl = staticPictureUrl;
+      if(pictureUrl.indexOf("?") > -1){
+        pictureUrl = pictureUrl + "&currentTimeCache=" + (new Date().getTime())
+      }else{
+        pictureUrl = pictureUrl + "?currentTimeCache=" + (new Date().getTime())
+      }
+   }
   
   getCardSize() {
     return 3;
