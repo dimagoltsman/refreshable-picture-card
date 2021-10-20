@@ -153,6 +153,7 @@ class ResfeshablePictureCard extends HTMLElement {
       }else{
         pictureUrl = pictureUrl + "?currentTimeCache=" + (new Date().getTime())
       }
+     return pictureUrl;
    }
   
   getCardSize() {
