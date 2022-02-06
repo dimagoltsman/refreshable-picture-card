@@ -127,7 +127,15 @@ class ResfeshablePictureCard extends HTMLElement {
     
     
     let refreshFunc = function(){
-      var pictureUrl = config.static_picture
+      
+      if( Array.isArray(config.static_picture)){
+        var picturessize = config.static_picture.Length();
+        var randpos = Math.random() * picturessize;
+        var pictureUrl = config.static_picture[randpos];
+      }Else{
+        var pictureUrl = config.static_picture;  
+      }
+      //var pictureUrl = config.static_picture
       
       if(config.entity_picture){
        pictureUrl = hassObj.states[config.entity_picture]["attributes"][config.attribute]
