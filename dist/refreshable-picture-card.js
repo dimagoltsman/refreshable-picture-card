@@ -28,7 +28,7 @@ class ResfeshablePictureCard extends HTMLElement {
     
     if( Array.isArray(config.static_picture)){
       let picture = config.static_picture
-    Else{
+      }Else{
       let picture = [config.static_picture];  
     }
     
