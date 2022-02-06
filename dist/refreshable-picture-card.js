@@ -26,7 +26,12 @@ class ResfeshablePictureCard extends HTMLElement {
     
     // console.log(hassObj.states[config.entity_picture]["attributes"][config.attribute])
     
-    let picture = config.static_picture;
+    if( Array.isArray(config.static_picture)){
+      let picture = config.static_picture
+    Else{
+      let picture = [config.static_picture];  
+    }
+    
     let title = config.title || ""
     
     let html = ""
@@ -38,7 +43,7 @@ class ResfeshablePictureCard extends HTMLElement {
     try{
         
         html += `
-        <img id="thePic" class="center thePic" src="${picture}"  ></img>
+        <img id="thePic" class="center thePic" src="${picture[0]}"  ></img>
         <br>
         `;
         const css = `
