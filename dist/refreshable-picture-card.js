@@ -155,4 +155,12 @@ class ResfeshablePictureCard extends HTMLElement {
 
 }
 
+window.customCards = window.customCards || []
+window.customCards.push({
+  type: 'refreshable-picture-card',
+  name: 'Refreshable Picture Card',
+  description: 'A picture that can be loaded from url or entity attribute and refreshed every N seconds',
+  preview: true,
+  documentationURL: 'https://github.com/dimagoltsman/refreshable-picture-card'
+})
 customElements.define('refreshable-picture-card', ResfeshablePictureCard);
