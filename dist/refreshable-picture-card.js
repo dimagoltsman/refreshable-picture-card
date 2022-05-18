@@ -120,12 +120,15 @@ class ResfeshablePictureCard extends HTMLElement {
     
     let refreshTime = config.update_interval || 30
     
-    
+    var pictureUrl;
     let refreshFunc = function(){
-      var pictureUrl = config.static_picture
+      pictureUrl = config.static_picture
       
       if(config.entity_picture){
-       pictureUrl = hassObj.states[config.entity_picture]["attributes"][config.attribute]
+       pictureUrl = hassObj.states[config.entity_picture].state
+       if(config.attribute){
+         pictureUrl = hassObj.states[config.entity_picture]["attributes"][config.attribute]
+       }
       
        
      }
