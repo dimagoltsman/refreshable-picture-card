@@ -150,7 +150,7 @@ class ResfeshablePictureCard extends HTMLElement {
   }
  
    _getPictureUrl(staticPictureUrl){
-      var pictureUrl = staticPictureUrl;
+      var pictureUrl = staticPictureUrl || "";
       if(pictureUrl.indexOf("?") > -1){
         pictureUrl = pictureUrl + "&currentTimeCache=" + (new Date().getTime())
       }else{
