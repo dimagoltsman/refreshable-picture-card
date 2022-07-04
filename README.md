@@ -59,6 +59,15 @@ tap_action:
 
 ```
 
+no margin (full card picture) example:
+
+```
+type: 'custom:refreshable-picture-card'
+static_picture: http://192.168.1.174/weatherForecast/weather.jpg
+noMargin: true
+
+```
+
 navigate example (onclick, open url in new tab): 
 
 ```
