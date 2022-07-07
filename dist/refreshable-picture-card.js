@@ -28,27 +28,33 @@ class ResfeshablePictureCard extends HTMLElement {
     
     let picture = this._getPictureUrl(config.static_picture);
     let title = config.title || ""
-    
-    let html = ""
-    if(!title){
-      html = "<br>"
-    }else{
-      html = `<p class="center txt">${title}</p><br>`
+
+    let html = "";    
+    if(!title && !config.noMargin){
+      html += `<br>`;
+    } else if(title) {
+      html += `<p class="center txt">${title}</p><br>`;
     }
     try{
         
-        html += `
-        <img id="thePic" class="center thePic" src="${picture}"  ></img>
-        <br>
-        `;
-        const css = `
+        html += `<img id="thePic" class="center thePic" src="${picture}"  ></img>`;
+        if(!config.noMargin === true) {
+          html+= `<br>`;
+        }
+        let css = `
           .center{
             display: block;
             margin-top: auto;
             margin-bottom: auto;
             margin-left: auto;
             margin-right: auto;
-            width: 90%;
+        `;
+        if(config.noMargin) {
+          css+=`width: 100%`;
+        }else {
+          css+=`width: 90%`;
+        }
+        css+= `    
           }
           .txt{
             color: var(--ha-card-header-color, --primary-text-color);
