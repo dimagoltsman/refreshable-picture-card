@@ -94,6 +94,8 @@ class ResfeshablePictureCard extends HTMLElement {
                              );
                 }else if(config.navigate){
                   window.open(config.navigate);
+                }else if(config.navigate_local){
+                  window.location.assign(config.navigate_local);
                 }
               
               };
