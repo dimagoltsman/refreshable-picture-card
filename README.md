@@ -77,7 +77,15 @@ update_interval: 1
 static_picture: http://192.168.1.174/cgi-bin/api.cgi?cmd=Snap&channel=0&rs=someString&user=username&password=password
 navigate: https://github.com/dimagoltsman/refreshable-picture-card/
 ```
+navigate_local example (onclick, change local/lovelace tab): 
 
+```
+type: 'custom:refreshable-picture-card'
+title: Reolink Camera
+update_interval: 1
+static_picture: http://192.168.1.174/cgi-bin/api.cgi?cmd=Snap&channel=0&rs=someString&user=username&password=password
+navigate_local: camera
+```
 
 
 # you are also welcome to contribute #
