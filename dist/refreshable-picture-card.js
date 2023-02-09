@@ -48,6 +48,16 @@ class ResfeshablePictureCard extends HTMLElement {
             margin-bottom: auto;
             margin-left: auto;
             margin-right: auto;
+            background: var( --ha-card-background, var(--card-background-color, white) );
+            box-shadow: var(--ha-card-box-shadow, none);
+            box-sizing: border-box;
+            border-width: var(--ha-card-border-width, 1px);
+            border-style: solid;
+            border-color: var( --ha-card-border-color, var(--divider-color, #e0e0e0) );
+            color: var(--primary-text-color);
+            transition: all 0.3s ease-out 0s;
+            position: relative;
+            border-radius: var(--ha-card-border-radius, 12px); 
         `;
         if(config.noMargin) {
           css+=`width: 100%`;
