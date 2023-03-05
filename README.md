@@ -22,6 +22,7 @@ You can set a picture from a URL or a picture from an entity attribute.
 | `entity`           | Picture entity                                            | mutually exclusive with `url`    |
 | `attribute`        | Entity attribute                                          | no                               |
 | `tap_action`       | Action on tap                                             | no                               |
+| `noMargin`         | Whether to disable the margin around the picture.         | no                               |
 
 Attribute picture example:
 
