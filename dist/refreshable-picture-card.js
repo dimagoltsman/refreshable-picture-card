@@ -1,195 +1,145 @@
+import {
+  LitElement,
+  html,
+  css,
+} from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
+import "./refreshable-picture-card-editor.js";
+import { handleAction } from "./utils.js";
 
-var hassObj = null;
-class ResfeshablePictureCard extends HTMLElement {
+class ResfeshablePictureCard extends LitElement {
+  static properties = {
+    hass: {},
+    config: {},
+    pictureUrl: {},
+  };
+
+  _refreshInterval;
 
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.pictureUrl = "";
   }
+
+  static getConfigElement() {
+    return document.createElement("refreshable-picture-card-editor");
+  }
+
+  static getStubConfig() {
+    return {
+      type: "custom:refreshable-picture-card",
+      title: "Refreshable Picture",
+      refresh_interval: 30,
+      url: "",
+      entity: "",
+      attribute: "",
+      noMargin: true,
+      tap_action: { action: "none" },
+    };
+  }
+
   setConfig(config) {
-    
-    const root = this.shadowRoot;
-    if (root.lastChild) root.removeChild(root.lastChild);
-
-    const cardConfig = Object.assign({}, config);
-    this._config = cardConfig
+    if (!config.url && !config.entity) {
+      throw new Error("You need to define either a url or an entity");
+    }
+    if (config.url && config.entity) {
+      throw new Error("You need to define only one of url or entity");
+    }
+    this.config = config;
+    const refreshTime = (config.refresh_interval || 30) * 1000;
+    clearInterval(this._refreshInterval);
+    this._refreshInterval = setInterval(
+      () => (this.pictureUrl = this._getTimestampedUrl()),
+      refreshTime
+    );
+    this.pictureUrl = this._getTimestampedUrl();
   }
 
- 
-  
-  set hass(hass) {
-    
-    hassObj = hass;
-
-  
-    const config = this._config;
-    
-    // console.log(hassObj.states[config.entity_picture]["attributes"][config.attribute])
-    
-    let picture = this._getPictureUrl(config.static_picture);
-    let title = config.title || ""
-
-    let html = "";    
-    if(!title && !config.noMargin){
-      html += `<br>`;
-    } else if(title) {
-      html += `<p class="center txt">${title}</p><br>`;
-    }
-    try{
-        
-        html += `<img id="thePic" class="center thePic" src="${picture}"  ></img>`;
-        if(!config.noMargin === true) {
-          html+= `<br>`;
-        }
-        let css = `
-          .center{
-            display: block;
-            margin-top: auto;
-            margin-bottom: auto;
-            margin-left: auto;
-            margin-right: auto;
-            background: var( --ha-card-background, var(--card-background-color, white) );
-            box-shadow: var(--ha-card-box-shadow, none);
-            box-sizing: border-box;
-            border-width: var(--ha-card-border-width, 1px);
-            border-style: solid;
-            border-color: var( --ha-card-border-color, var(--divider-color, #e0e0e0) );
-            color: var(--primary-text-color);
-            transition: all 0.3s ease-out 0s;
-            position: relative;
-            border-radius: var(--ha-card-border-radius, 12px); 
-        `;
-        if(config.noMargin) {
-          css+=`width: 100%`;
-        }else {
-          css+=`width: 90%`;
-        }
-        css+= `    
-          }
-          .txt{
-            color: var(--ha-card-header-color, --primary-text-color);
-            font-family: var(--ha-card-header-font-family, inherit);
-            font-size: var(--ha-card-header-font-size, 24px);
-            letter-spacing: -0.012em;
-            line-height: 32px;
-          }
-          
-        `;
-  
-        
-        const root = this.shadowRoot;
-        this._hass = hass;
-        // root.lastChild.hass = hass;
-   
-        const card = document.createElement('ha-card');
-        if(!this.content){
-             this.content = document.createElement('div');
-             const style = document.createElement('style');
-             
-  
-             style.textContent = css;
-             this.content.innerHTML = html;
-             card.appendChild(this.content);
-             card.appendChild(style);
-             
-             root.appendChild(card);
-             card.onclick = function(){
-                if(config.tap_action){
-                  let domain = config.tap_action.call.split(".")[0]
-                  let action = config.tap_action.call.split(".")[1]
-                   console.log(config.tap_action.data);
-                   hass.callService(domain,
-                            action, 
-                            config.tap_action.data
-                             );
-                }else if(config.navigate){
-                  window.open(config.navigate);
-                }else if(config.navigate_local){
-                  window.location.assign(config.navigate_local);
-                }
-              
-              };
-              this._bindrefresh(card, this._hass, this._config, this._getPictureUrl);
-              
-              window[`scriptLoaded`] = true
-        }
-    
-    } catch(err){
-      console.log(err)
-      console.log('waiting for refreshable-picture-card to load');
-    }
-    
+  render() {
+    const { noMargin, title } = this.config;
+    return html`
+      <ha-card header=${title} @click="${this._onClick}">
+        <div class=${noMargin ? "withoutMargin" : "withMargin"}>
+          <img class="center" src="${this.pictureUrl}" />
+        </div>
+      </ha-card>
+    `;
   }
-  
-  _makeid(length) {
-   var result           = '';
-   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-   var charactersLength = characters.length;
-   for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-   }
-   return result;
-}
- 
-    
-  _bindrefresh(card, hass, config, getPictureUrl){
-    var picture =  card.getElementsByClassName(`thePic`)[0];
-  
-    
-    let refreshTime = config.update_interval || 30
-    
-    var pictureUrl;
-    let refreshFunc = function(){
-      pictureUrl = config.static_picture
-      
-      if(config.entity_picture){
-       pictureUrl = hassObj.states[config.entity_picture].state
-       if(config.attribute){
-         pictureUrl = hassObj.states[config.entity_picture]["attributes"][config.attribute]
-       }
-      
-       
-     }
-     
-     if(window.getComputedStyle(picture).display){
-      
-      // console.log(pictureUrl)
-       picture.src = getPictureUrl(pictureUrl);
-    
-     }
-   
-       
-       setTimeout(refreshFunc, refreshTime * 1000)
-    }
-    
-    
-    refreshFunc();
 
+  _onClick() {
+    const { config, hass } = this;
+    const { tap_action } = config;
+    if (!tap_action) {
+      return;
+    }
+    handleAction(this, hass, config, tap_action);
   }
- 
-   _getPictureUrl(staticPictureUrl){
-      var pictureUrl = staticPictureUrl || "";
-      if(pictureUrl.indexOf("?") > -1){
-        pictureUrl = pictureUrl + "&currentTimeCache=" + (new Date().getTime())
-      }else{
-        pictureUrl = pictureUrl + "?currentTimeCache=" + (new Date().getTime())
-      }
-     return pictureUrl;
-   }
-  
+
+  static styles = css`
+    .center {
+      display: block;
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: auto;
+      margin-right: auto;
+      background: var(
+        --ha-card-background,
+        var(--card-background-color, white)
+      );
+      box-shadow: var(--ha-card-box-shadow, none);
+      box-sizing: border-box;
+      border-width: var(--ha-card-border-width, 1px);
+      border-style: solid;
+      border-color: var(--ha-card-border-color, var(--divider-color, #e0e0e0));
+      color: var(--primary-text-color);
+      transition: all 0.3s ease-out 0s;
+      position: relative;
+      border-radius: var(--ha-card-border-radius, 12px);
+      width: 100%;
+    }
+    .withMargin {
+      margin: 5%;
+    }
+    .withoutMargin {
+      margin: 0;
+    }
+    .txt {
+      color: var(--ha-card-header-color, --primary-text-color);
+      font-family: var(--ha-card-header-font-family, inherit);
+      font-size: var(--ha-card-header-font-size, 24px);
+      letter-spacing: -0.012em;
+      line-height: 32px;
+    }
+  `;
+
+  _getPictureUrl() {
+    const { url, entity, attribute } = this.config;
+    if (!entity) {
+      return url;
+    }
+    const pictStates = this.hass.states[entity];
+    return attribute ? pictStates["attributes"][attribute] : pictStates.state;
+  }
+
+  _getTimestampedUrl() {
+    const url = this._getPictureUrl();
+    return url ? `${url}#${new Date().getTime()}` : "";
+  }
+
   getCardSize() {
     return 3;
   }
-  
-
 }
 
-window.customCards = window.customCards || []
-window.customCards.push({
-  type: 'refreshable-picture-card',
-  name: 'Refreshable Picture Card',
-  description: 'A picture that can be loaded from url or entity attribute and refreshed every N seconds',
+const cardDef = {
+  type: "refreshable-picture-card",
+  name: "Refreshable Picture Card",
+  description:
+    "A picture that can be loaded from url or entity attribute and refreshed every N seconds",
   preview: true,
-  documentationURL: 'https://github.com/dimagoltsman/refreshable-picture-card'
-})
-customElements.define('refreshable-picture-card', ResfeshablePictureCard);
+  documentationURL: "https://github.com/dimagoltsman/refreshable-picture-card",
+  configurable: true,
+};
+window.customCards = window.customCards || [];
+window.customCards.push(cardDef);
+
+customElements.define("refreshable-picture-card", ResfeshablePictureCard);
