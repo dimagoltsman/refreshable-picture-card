@@ -122,7 +122,7 @@ class ResfeshablePictureCard extends LitElement {
 
   _getTimestampedUrl() {
     const url = this._getPictureUrl();
-    return url ? `${url}#${new Date().getTime()}` : "";
+    return url ? `${url}?${new Date().getTime()}` : "";
   }
 
   getCardSize() {
