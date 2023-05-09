@@ -45,13 +45,25 @@ class ResfeshablePictureCard extends LitElement {
       throw new Error("You need to define only one of url or entity");
     }
     this.config = config;
-    const refreshTime = (config.refresh_interval || 30) * 1000;
+  }
+
+  connectedCallback() {
+    super.connectedCallback?.();
+
+    const refreshTime = (this.config.refresh_interval || 30) * 1000;
     clearInterval(this._refreshInterval);
     this._refreshInterval = setInterval(
       () => (this.pictureUrl = this._getTimestampedUrl()),
       refreshTime
     );
     this.pictureUrl = this._getTimestampedUrl();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback?.();
+    if (this._refreshInterval) {
+      clearInterval(this._refreshInterval);
+    }
   }
 
   render() {
