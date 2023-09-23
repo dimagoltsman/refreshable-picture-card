@@ -18,6 +18,7 @@ class ResfeshablePictureCard extends LitElement {
   constructor() {
     super();
     this.pictureUrl = "";
+    this.hasError = false;
   }
 
   static getConfigElement() {
@@ -66,12 +67,26 @@ class ResfeshablePictureCard extends LitElement {
     }
   }
 
+  onError() {
+    if (!this.hasError) {
+      this.hasError = true;
+      this.pictureUrl = this._getTimestampedUrl();
+    }
+  }
+
+  onLoad() {
+    this.hasError = false;
+  }
+
   render() {
     const { noMargin, title } = this.config;
     return html`
       <ha-card header=${title} @click="${this._onClick}">
         <div class=${noMargin ? "withoutMargin" : "withMargin"}>
-          <img class="center" src="${this.pictureUrl}" />
+          ${this.pictureUrl != '' ?
+            html`<img class="center" @error="${this.onError}" @load="${this.onLoad}" src="${this.pictureUrl}" />` :
+            ''
+          }
         </div>
       </ha-card>
     `;
