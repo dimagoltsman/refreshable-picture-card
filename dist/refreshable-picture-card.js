@@ -49,20 +49,28 @@ class ResfeshablePictureCard extends LitElement {
 
   connectedCallback() {
     super.connectedCallback?.();
-
     const refreshTime = (this.config.refresh_interval || 30) * 1000;
-    clearInterval(this._refreshInterval);
+
+    if(this._refreshInterval) {
+      clearInterval(this._refreshInterval);
+    }
     this._refreshInterval = setInterval(
       () => (this.pictureUrl = this._getTimestampedUrl()),
       refreshTime
     );
-    this.pictureUrl = this._getTimestampedUrl();
+
+    // calling it after 10 ms ensures this.hass will be set
+    setTimeout(
+        () => (this.pictureUrl = this._getTimestampedUrl()),
+        10
+    );
   }
 
   disconnectedCallback() {
     super.disconnectedCallback?.();
     if (this._refreshInterval) {
       clearInterval(this._refreshInterval);
+      this._refreshInterval = undefined;
     }
   }
 
