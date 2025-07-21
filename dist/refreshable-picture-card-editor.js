@@ -2,8 +2,8 @@ import {
   LitElement,
   html,
   css,
-} from "https://cdn.jsdelivr.net/npm/lit-element@4.1.1/+esm";
-import { fireEvent } from "./utils.js";
+} from "lit";
+import { fireEvent } from "/hacsfiles/refreshable-picture-card/utils.js";
 
 const SCHEMA = [
   { name: "title", selector: { text: {} } },
@@ -33,7 +33,7 @@ const SCHEMA = [
   { name: "noMargin", selector: { boolean: {} } },
 ];
 
-class ResfeshablePictureCardEditor extends LitElement {
+class RefreshablePictureCardEditor extends LitElement {
   static properties = {
     hass: {},
     _config: {},
@@ -116,7 +116,4 @@ class ResfeshablePictureCardEditor extends LitElement {
   `;
 }
 
-customElements.define(
-  "refreshable-picture-card-editor",
-  ResfeshablePictureCardEditor
-);
+customElements.define("refreshable-picture-card-editor", RefreshablePictureCardEditor);

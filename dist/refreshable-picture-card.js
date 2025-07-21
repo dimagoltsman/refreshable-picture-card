@@ -2,11 +2,11 @@ import {
   LitElement,
   html,
   css,
-} from "https://cdn.jsdelivr.net/npm/lit-element@4.1.1/+esm";
-import "./refreshable-picture-card-editor.js";
-import { handleAction } from "./utils.js";
+} from "lit";
+import "/hacsfiles/refreshable-picture-card/refreshable-picture-card-editor.js";
+import { handleAction } from "/hacsfiles/refreshable-picture-card/utils.js";
 
-class ResfeshablePictureCard extends LitElement {
+class RefreshablePictureCard extends LitElement {
   static properties = {
     hass: {},
     config: {},
@@ -195,4 +195,4 @@ const cardDef = {
 window.customCards = window.customCards || [];
 window.customCards.push(cardDef);
 
-customElements.define("refreshable-picture-card", ResfeshablePictureCard);
+customElements.define("refreshable-picture-card", RefreshablePictureCard);
