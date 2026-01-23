@@ -14,15 +14,16 @@ Configuration is very easy, and can be done graphically.
 
 You can set a picture from a URL or a picture from an entity attribute.
 
-|        Name        |                        Description                        |             Required             |
-| ------------------ | --------------------------------------------------------- | -------------------------------- |
-| `title`            | Cart title                                                | no                               |
-| `refresh_interval` | Time in seconds between refreshes. Defaults to 30 seconds | yes                              |
-| `url`              | URL of the picture. Can be a local path.                  | mutually exclusive with `entity` |
-| `entity`           | Picture entity                                            | mutually exclusive with `url`    |
-| `attribute`        | Entity attribute                                          | no                               |
-| `tap_action`       | Action on tap                                             | no                               |
-| `noMargin`         | Whether to disable the margin around the picture.         | no                               |
+|        Name        |                        Description                           |             Required             |
+| ------------------ | ------------------------------------------------------------ | -------------------------------- |
+| `title`            | Cart title                                                   | no                               |
+| `refresh_interval` | Time in seconds between refreshes. Defaults to 30 seconds    | yes                              |
+| `url`              | URL of the picture. Can be a local path.                     | mutually exclusive with `entity` |
+| `entity`           | Picture entity                                               | mutually exclusive with `url`    |
+| `attribute`        | Entity attribute                                             | no                               |
+| `tap_action`       | Action on tap                                                | no                               |
+| `noMargin`         | Whether to disable the margin around the picture.            | no                               |
+| `fallback_image`   | Optional URL of an image to show while refreshed image loads | no                               |
 
 Attribute picture example:
 
@@ -73,6 +74,16 @@ no margin (full card picture) example:
 type: 'custom:refreshable-picture-card'
 url: http://192.168.1.174/weatherForecast/weather.jpg
 noMargin: true
+```
+
+fallback image example (use a static placeholder while refreshed image is loading):
+
+```yaml
+type: 'custom:refreshable-picture-card'
+title: My Camera with Placeholder
+refresh_interval: 5
+url: /local/camera/snap.jpg
+fallback_image: /local/images/placeholder.png
 ```
 
 navigate example (onclick, open url in new tab):
