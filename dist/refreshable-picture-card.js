@@ -189,12 +189,16 @@ class ResfeshablePictureCard extends LitElement {
     if (!entity) {
       return url;
     }
+    if (!this.hass) return undefined;
     const pictStates = this.hass.states[entity];
+    if (!pictStates) return undefined;
     return attribute ? pictStates["attributes"][attribute] : pictStates.state;
   }
 
   _getTimestampedUrl() {
     let url = this._getPictureUrl();
+
+    if (!url || typeof url !== "string") return "";
 
     if (url.indexOf("?") > -1) {
       url = url + "&currentTimeCache=" + new Date().getTime();
